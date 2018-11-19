@@ -1,0 +1,27 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+body {
+	background-color:  #36444b
+}
+
+.login-page, .otp-page {
+	display: flex;
+  justify-content: center;
+  min-height: 500px;    
+  align-items: center; 
+
+  label {
+  	color: wheat;		
+  }
+}
+
+
+.header {
+	height: 60px;
+	font-size: 30px;
+	font-weight: 500;	
+	margin-top: 25px;  
+	color: beige;
+}
+

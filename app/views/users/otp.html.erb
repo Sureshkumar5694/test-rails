@@ -1,0 +1,11 @@
+# <%= mobile_number = session[:mobile_number] %>
+<div class="otp-page">
+  <form action="/users/authenticate_otp" method="post">
+    <div class="form-group">
+      <label for="otp">Enter your otp</label>
+      <input type="hidden" class="form-control" name="mobile_number" value="8015768824">
+      <input type="text" class="form-control" name="otp" id="otp">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>  
+</div>
