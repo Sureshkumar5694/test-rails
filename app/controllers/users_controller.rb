@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 	end	
 
 	def login
-		session[:cid] = params[:cid]	
+		session[:cid] = params[:client_mac]	
 		session[:ap] = params[:ap]
 		session[:ssid] = params[:ssid]
 		session[:t] = params[:t]
@@ -30,15 +30,15 @@ class UsersController < ApplicationController
 	def authenticate_otp
 		otp = params[:otp]
 		# unless @user.verify_otp?(otp)
-			req_params = { name: 'admin', password: 'ajira12345' }
+			req_params = { name: 'admin', password: 'ajira12345' }			
+			response = HTTParty.post('http://18.220.161.97:8088/login', body: req_params, verify: false)
 			binding.pry
-			response = HTTParty.post('http://18.220.161.97:8088/login', body: req_params)
 	    
 	    HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
 			req_params = { cid: params[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], time: "1800" }
-			response = HTTParty.post('http://18.220.161.97:8088/extportal/site_name/auth', body: req_params)
+			response = HTTParty.post('http://18.220.161.97:8088/extportal/site_name/auth', body: req_params, verify: false)
  
-			HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
+			HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0], verify: false)
 			HTTParty.post('http://18.220.161.97:8088/logout')
 			
 		# end	
