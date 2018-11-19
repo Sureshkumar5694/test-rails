@@ -11,16 +11,16 @@ class UsersController < ApplicationController
 	end	
 
 	def login
-		# session[:cid] = params[:cid]	
-		# session[:ap] = params[:ap]
-		# session[:ssid] = params[:ssid]
-		# session[:t] = params[:t]
-		# session[:rid] = params[:rid]
-		# session[:site] = params[:site]
+		session[:cid] = params[:cid]	
+		session[:ap] = params[:ap]
+		session[:ssid] = params[:ssid]
+		session[:t] = params[:t]
+		session[:rid] = params[:rid]
+		session[:site] = params[:site]
 
-		session[:clientMac] = params[:clientMac]
-		session[:radiusSvrIp] = "192.168.1.48"
-		session[:target] = params[:target]
+		# session[:clientMac] = params[:clientMac]
+		# session[:radiusSvrIp] = "192.168.1.48"
+		# session[:target] = params[:target]
 	end	
 
 	def otp
@@ -30,19 +30,17 @@ class UsersController < ApplicationController
 	def authenticate_otp
 		otp = params[:otp]
 		# unless @user.verify_otp?(otp)
-			# req_params = { name: 'admin', password: 'ajira12345' }
-			# response = HTTParty.post('http:controller_ip/login', body: req_params)
+			req_params = { name: 'admin', password: 'ajira12345' }
+			binding.pry
+			response = HTTParty.post('http://18.220.161.97:8088/login', body: req_params)
 	    
-	  #   HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
-			# req_params = { cid: params[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], time: "1800" }
-			# response = HTTParty.post('http:controller_ip/extportal/site_name/auth', body: req_params)
+	    HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
+			req_params = { cid: params[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], time: "1800" }
+			response = HTTParty.post('http://18.220.161.97:8088/extportal/site_name/auth', body: req_params)
  
-			# HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
-			# HTTParty.post('https://controller_server_ip:https_port/logout')
+			HTTParty.default_cookies.add_cookies(response.headers["set-cookie"][0])
+			HTTParty.post('http://18.220.161.97:8088/logout')
 			
-			req_params = { username: "admin", password: "ajira12345",clientMac: session[:clientMac], radiusSvrIp: session[:radiusSvrIp] }
-			res = HTTParty.post("http://192.168.1.151/portal/auth", body: req_params)
-			puts "response ==============> #{res}"
 		# end	
 	end
 
