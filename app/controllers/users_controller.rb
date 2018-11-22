@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 			return
 		end
 
-		res = APControllerApi.authorize_user({ cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], site_name: session[:site_name], time: "120" })
+		res = APControllerApi.authorize_user({ cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], time: "120" })
 		if res.parsed_response['success'] == false
 			redirect_to login_failed_users_path and return
 		end	
@@ -65,7 +65,7 @@ class APControllerApi
 	  login_params = { name: ENV['ap_controller_username'], password: ENV['ap_controller_password']}
 		response = api.post("#{BASE_URL}/login", body: login_params, verify: false)		
 
-		site_name = authriozation_params[:site_name]
+		site_name = authriozation_params[:site]
 		csrf_token = response.parsed_response["value"]
 		api.post("#{BASE_URL}/extportal/#{site_name}/auth?token=#{csrf_token}", body: authriozation_params, verify: false)				
 	end	
