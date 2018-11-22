@@ -4,9 +4,10 @@ class UsersController < ApplicationController
 
 	def create		
 		user = User.where(mobile_number: params[:mobile_number]).first_or_initialize
-		if user.valid?
-			flash[:error] = "Invalid Mobile number"
+		unless user.valid?
+			flash[:danger] = "Invalid Mobile number"
 			redirect_to login_users_path
+			return
 		end	
 
 		user.generate_otp
@@ -17,25 +18,33 @@ class UsersController < ApplicationController
 	end	
 
 	def login
-		session.merge!(params)		
+		session.merge!(params.permit(:cid, :ap, :ssid, :rid, :site, :t))		
+		binding.pry
 	end	
 
 	def otp		
 	end
 
 	def authenticate_otp		
-		otp = params[:otp]
-		
+		otp = params[:otp]		
 		unless @user.verify_otp?(otp)
-			flash[:error] = "Otp invalid or expired"
+			flash[:danger] = "Otp invalid or expired"
+			redirect_to otp_users_path
 			return
 		end
 
-		APControllerApi.authorize_user
-		redirect_to login_success_users_path
+		res = APControllerApi.authorize_user({ cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], site_name: session[:site_name], time: "120" })
+		if res.parsed_response['success'] == false
+			redirect_to login_failed_users_path and return
+		end	
+		redirect_to login_success_users_path and return
 	end
 
 	def login_success
+
+	end	
+
+	def login_failed
 
 	end	
 
@@ -52,18 +61,14 @@ class APControllerApi
 	include HTTParty_with_cookies
 	BASE_URL = ENV['ap_controller_url']
 
-	def self.authorize_user
+	def self.authorize_user(authriozation_params)
 	  api = APControllerApi.new 
-	  req_params = { name: ENV['ap_controller_username'], password: ENV['ap_controller_password']}
-		response = api.post("#{BASE_URL}/login", body: req_params, verify: false)		
-            
-		req_params = { cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], time: "120" }
-		site_name = session[:site_name]
+	  login_params = { name: ENV['ap_controller_username'], password: ENV['ap_controller_password']}
+		response = api.post("#{BASE_URL}/login", body: login_params, verify: false)		
+
+		site_name = authriozation_params[:site_name]
 		csrf_token = response.parsed_response["value"]
-		response = api.post("#{BASE_URL}/extportal/#{site_name}/auth?token=#{csrf_token}", body: req_params, verify: false)
-		
-		csrf_token = response.parsed_response["value"]	
-		api.post("#{BASE_URL}/logout?token=#{csrf_token}")
+		api.post("#{BASE_URL}/extportal/#{site_name}/auth?token=#{csrf_token}", body: authriozation_params, verify: false)				
 	end	
 end	
 

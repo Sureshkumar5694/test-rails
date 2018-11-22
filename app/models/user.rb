@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-	validates :phone,:presence => true, :numericality => true, :length => { :minimum => 10, :maximum => 11 }
+	validates :mobile_number,:presence => true, :numericality => true, :length => { :minimum => 10, :maximum => 11 }
 
 	def is_otp_expired?
   	otp_expires_at.nil?|| otp_expires_at.past?
@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 	end	
 
 	def verify_otp?(otp)
-		otp == otp && !is_otp_expired?
+		otp == self.otp && !is_otp_expired?
 	end	
 
 end

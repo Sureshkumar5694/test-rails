@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   		get :otp
   		post :authenticate_otp
   		get :login_success
+  		get :login_failed
   	end	
   end
 
