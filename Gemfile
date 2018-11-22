@@ -27,7 +27,7 @@ gem 'turbolinks', '~> 5'
 gem 'jquery-rails'
 
 gem 'jbuilder', '~> 2.5'
-gem 'httparty'
+gem 'httparty_with_cookies'
 gem 'pry'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
