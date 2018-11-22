@@ -18,8 +18,7 @@ class UsersController < ApplicationController
 	end	
 
 	def login
-		session.merge!(params.permit(:cid, :ap, :ssid, :rid, :site, :t))		
-		binding.pry
+		session.merge!(params.permit(:cid, :ap, :ssid, :rid, :site, :t))				
 	end	
 
 	def otp		
@@ -37,7 +36,7 @@ class UsersController < ApplicationController
 		if res.parsed_response['success'] == false
 			redirect_to login_failed_users_path and return
 		end	
-		redirect_to login_success_users_path and return
+		redirect_to login_success	_users_path and return
 	end
 
 	def login_success
