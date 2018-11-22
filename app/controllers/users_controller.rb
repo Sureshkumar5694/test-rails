@@ -30,8 +30,9 @@ class UsersController < ApplicationController
 
 	def authenticate_otp
 		otp = params[:otp]
-		# unless @user.verify_otp?(otp)			req_params = { name: 'admin', password: 'ajira12345'}
+		# unless @user.verify_otp?(otp)
 		  api = ControllerApi.new 
+		  req_params = { name: 'admin', password: 'ajira12345'}
 			response = api.post('https://18.220.161.97:8043/login', body: req_params, verify: false)
 			binding.pry
 	    	    	    
