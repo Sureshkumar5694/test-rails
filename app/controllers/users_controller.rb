@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 			return
 		end
 
-		res = APControllerApi.authorize_user({ cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], time: "120" })
+		res = APControllerApi.authorize_user({ cid: session[:cid], ap: session[:ap], ssid: session[:ssid],rid: session[:rid], site: session[:site], t: session[:t], time: "1800" })
 		if res.parsed_response['success'] == false
 			redirect_to login_failed_users_path and return
 		end	
