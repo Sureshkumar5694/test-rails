@@ -36,6 +36,7 @@ class UsersController < ApplicationController
 		if res.parsed_response['success'] == false
 			redirect_to login_failed_users_path and return
 		end	
+		# trigger event
 		redirect_to login_success_users_path
 	end
 
